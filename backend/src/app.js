@@ -1,18 +1,11 @@
 const express = require("express");
 const sequelize = require("./config/database");
-const fileRoutes = require("./routes/fileRoutes"); // Importe suas rotas
-const userRoutes = require("./routes/userRoutes");
-// Importe outras rotas, se houver
+const router = require("./routes/index");
 
 const app = express();
 
 // Middlewares e configurações do Express
 app.use(express.json()); // Habilita o uso de JSON nas requisições
-
-// Definição das rotas
-app.use("/files", fileRoutes); // Adicione suas rotas de arquivos
-app.use("/users", userRoutes); // Adicione suas rotas de usuários
-// Adicione outras rotas aqui, se necessário
 
 async function inicializarBancoDeDados() {
   try {
@@ -26,6 +19,8 @@ async function inicializarBancoDeDados() {
 }
 
 inicializarBancoDeDados();
+
+app.use("", router);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
