@@ -1,0 +1,19 @@
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
+const User = require("./User");
+const Folder = require("./Folder");
+const File = require("./File");
+
+const Permission = sequelize.define("Permission", {
+  accessLevel: {
+    type: DataTypes.ENUM("read", "write", "admin"), // Define os níveis de acesso permitidos
+    allowNull: false,
+    defaultValue: "read",
+  },
+});
+
+Permission.belongsTo(User);
+Permission.belongsTo(Folder);
+Permission.belongsTo(File);
+
+module.exports = Permission;

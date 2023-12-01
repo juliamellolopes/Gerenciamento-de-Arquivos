@@ -1,0 +1,30 @@
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/database");
+const User = require("./User");
+
+const Folder = sequelize.define(
+  "Folder",
+  {
+    folderName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "O nome da pasta não pode ser vazio.",
+        },
+      },
+    },
+    // Outros campos necessários para a tabela de pastas
+  },
+  {
+    tableName: "folders",
+    timestamps: true,
+    createdAt: "CreatedAt",
+    updatedAt: "UpdatedAt",
+  }
+);
+
+Folder.belongsTo(User); // Estabelecendo relação com Usuários
+Folder.hasMany(Folder, { as: "Subfolders", foreignKey: "ParentFolderId" }); // Relacionamento de autoassociação
+
+module.exports = Folder;
