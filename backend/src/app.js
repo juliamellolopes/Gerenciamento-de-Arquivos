@@ -1,9 +1,18 @@
-// app.js ou index.js (arquivo principal da sua aplicação)
-const sequelize = require("./config/database"); // Importe sua configuração do Sequelize
-const User = require("./models/User"); // Importe seus modelos
-const Folder = require("./models/Folder");
-const File = require("./models/File");
-const VersionHistory = require("./models/VersionHistory");
+const express = require("express");
+const sequelize = require("./config/database");
+const fileRoutes = require("./routes/fileRoutes"); // Importe suas rotas
+const userRoutes = require("./routes/userRoutes");
+// Importe outras rotas, se houver
+
+const app = express();
+
+// Middlewares e configurações do Express
+app.use(express.json()); // Habilita o uso de JSON nas requisições
+
+// Definição das rotas
+app.use("/files", fileRoutes); // Adicione suas rotas de arquivos
+app.use("/users", userRoutes); // Adicione suas rotas de usuários
+// Adicione outras rotas aqui, se necessário
 
 async function inicializarBancoDeDados() {
   try {
@@ -17,3 +26,8 @@ async function inicializarBancoDeDados() {
 }
 
 inicializarBancoDeDados();
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor iniciado na porta ${PORT}`);
+});

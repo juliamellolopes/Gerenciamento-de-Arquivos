@@ -1,10 +1,50 @@
 const express = require("express");
 const router = express.Router();
 
-const usersController = require("../controllers/usersController");
+const userController = require("../controllers/userController");
+const folderController = require("../controllers/folderController");
+const filesController = require("../controllers/filesController");
+const permissionsController = require("../controllers/permissionsController");
+const versionsController = require("../controllers/versionsController");
 
-// Rota para cadastrar um novo usuário
-router.post("/cadastro", usersController.cadastrarUser);
-router.get("/redefinir-senha", usersController.redefinirSenha);
+//Versions
+router.get("/download/:versionHistoryId", versionsController.downloadFile);
+router.get(
+  "/arquivos/:fileId/versoes",
+  versionsController.listarVersoesArquivo
+);
+
+//Permissions
+router.post(
+  "/permissao/arquivo",
+  permissionsController.cadastrarPermissaoArquivo
+);
+router.post("/permissao/pasta", permissionsController.cadastrarPermissaoPasta);
+
+//Files
+router.post("/criarArquivo", filesController.criarArquivo);
+router.delete(
+  "/deletarArquivo/:userId/:arquivoId",
+  filesController.deletarArquivo
+);
+router.get("/baixarArquivo/:userId/:arquivoId", filesController.baixarArquivo);
+router.put(
+  "/atualizarArquivo/:userId/:arquivoId",
+  filesController.atualizarArquivo
+);
+
+//Folder
+router.post("/criarPasta", folderController.criarPasta);
+router.delete("/deletarPasta/:userId/:pastaId", folderController.deletarPasta);
+router.put("/editarPasta/:userId/:pastaId", folderController.editarPasta);
+
+//User
+router.post("/cadastrar", userController.cadastrarUser);
+router.post("/login", userController.login);
+router.post("/redefinir-senha", userController.redefinirSenha);
+router.get(
+  "/usuarios/:userId/pastas-arquivos",
+  userController.listarPastasArquivos
+);
 
 module.exports = router;
