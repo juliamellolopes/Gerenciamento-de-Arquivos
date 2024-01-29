@@ -5,9 +5,11 @@ import {
   getUserCredentials,
   saveUserData,
 } from "../../utils/cookieManager";
+import validateServices from "../../utils/validateServices";
 import userService from "../../services/userService"; // Seu caminho real para userService
 import showPasswordIcon from "../../assets/Icons/showPassword.png";
 import hidePasswordIcon from "../../assets/Icons/hidePassword.png";
+import NotificationComponent from "../../components/Notification/Notification";
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState("");
@@ -29,6 +31,10 @@ function Login({ onLogin }) {
 
   const handleLogin = async () => {
     try {
+      // Validar dados antes de prosseguir
+      validateServices.validateUserData(email, password);
+
+      // Continuar com a lógica de login se a validação passar
       const data = await userService.login(email, password);
 
       // Salvar credenciais se "lembrar-me" estiver ativado
@@ -36,8 +42,15 @@ function Login({ onLogin }) {
       saveUserData(data);
 
       onLogin(data);
+      NotificationComponent({
+        type: "success",
+        message: data.message,
+      });
     } catch (error) {
-      console.error(error.message);
+      NotificationComponent({
+        type: "error",
+        message: error.message,
+      });
     }
   };
 
