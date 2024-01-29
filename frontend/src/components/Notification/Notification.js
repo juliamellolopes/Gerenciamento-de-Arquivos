@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Icon } from "rsuite";
+import { Notification, Button, Icon } from "rsuite";
 import "rsuite/dist/styles/rsuite-default.css";
-import "./Notification.css"; // Estilo para o componente de notificação
+import "./Notification.css";
 
 const NotificationComponent = ({ type, message }) => {
   const [visible, setVisible] = useState(false);

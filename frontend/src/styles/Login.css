@@ -21,7 +21,7 @@ body {
     border-radius: 25px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 700px;
-    height: 380px;
+    height: 400px;
     display: flex;
 }
 
@@ -44,7 +44,7 @@ body {
     display: block;
     margin: 0 auto;
     width: 80%;
-    padding: 10px;
+    padding: 9px;
     margin-bottom: 15px;
     border: 1px solid #000000b4;
     border-radius: 20px;
@@ -57,7 +57,7 @@ body {
     padding: 10px 20px;
     border: none;
     border-radius: 20px;
-    background-color: #007bff;
+    background-color: #0F679A;
     color: white;
     font-size: 16px;
     cursor: pointer;
@@ -65,6 +65,7 @@ body {
     height: 50px;
     display: block;
     margin: 0 auto;
+    font-size: 18px;
 }
 
 .login-acess button:hover {
@@ -77,7 +78,7 @@ body {
 
 .password-input input {
     width: 80%;
-    padding: 10px;
+    padding: 9px;
     margin-bottom: 15px;
     border: 1px solid #000000b4;
     border-radius: 20px;
@@ -88,7 +89,7 @@ body {
 
 .password-input .toggle-password-button {
     position: absolute;
-    top: 55%;
+    top: 49%;
     right: 50px;
     transform: translateY(-50%);
     cursor: pointer;
@@ -157,5 +158,6 @@ body {
     width: 100%;
     background-position: center;
     margin-left: 15px;
+    margin-bottom: 15px;
 }
 

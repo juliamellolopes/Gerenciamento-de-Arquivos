@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/Login.css";
 import {
   saveUserCredentials,
   getUserCredentials,
   saveUserData,
 } from "../../utils/cookieManager";
 import validateServices from "../../utils/validateServices";
-import userService from "../../services/userService"; // Seu caminho real para userService
+import userService from "../../services/userService";
 import showPasswordIcon from "../../assets/Icons/showPassword.png";
 import hidePasswordIcon from "../../assets/Icons/hidePassword.png";
 import NotificationComponent from "../../components/Notification/Notification";
+
+import "../../styles/Login.css";
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState("");
