@@ -8,16 +8,31 @@ import validateServices from "../../utils/validateServices";
 import userService from "../../services/userService";
 import showPasswordIcon from "../../assets/Icons/showPassword.png";
 import hidePasswordIcon from "../../assets/Icons/hidePassword.png";
-import NotificationComponent from "../../components/Notification/Notification";
+import Notification from "../../components/Notification/Notification";
+import { ToastContainer } from "react-toastify";
 
 import "../../styles/Login.css";
 
-function Login({ onLogin }) {
+function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [hidePassword, setHidePassword] = useState(hidePasswordIcon);
+
+  const [notification, setNotification] = useState({
+    type: "",
+    message: "",
+    visible: false,
+  });
+
+  const showNotification = (type, message) => {
+    setNotification({
+      type,
+      message,
+      visible: true,
+    });
+  };
 
   useEffect(() => {
     // Verificar se há credenciais salvas ao iniciar o componente
@@ -32,26 +47,19 @@ function Login({ onLogin }) {
 
   const handleLogin = async () => {
     try {
-      // Validar dados antes de prosseguir
+      //// Validar dados antes de prosseguir
       validateServices.validateUserData(email, password);
 
-      // Continuar com a lógica de login se a validação passar
+      //// Continuar com a lógica de login se a validação passar
       const data = await userService.login(email, password);
 
-      // Salvar credenciais se "lembrar-me" estiver ativado
+      //// Salvar credenciais se "lembrar-me" estiver ativado
       saveUserCredentials(email, password, rememberMe);
       saveUserData(data);
 
-      onLogin(data);
-      NotificationComponent({
-        type: "success",
-        message: data.message,
-      });
+      showNotification("success", data.message);
     } catch (error) {
-      NotificationComponent({
-        type: "error",
-        message: error.message,
-      });
+      showNotification("error", error.message);
     }
   };
 
@@ -107,6 +115,12 @@ function Login({ onLogin }) {
           <div className="brand-slogan"> </div>
         </div>
       </div>
+      <Notification
+        type={notification.type}
+        message={notification.message}
+        visible={notification.visible}
+      />
+      <ToastContainer />
     </div>
   );
 }
