@@ -1,5 +1,3 @@
-// Notification.js
-
 import React, { useState, useEffect } from "react";
 import { FaCoffee, FaCheck, FaExclamation, FaTimes } from "react-icons/fa";
 import "react-toastify/dist/ReactToastify.css";
