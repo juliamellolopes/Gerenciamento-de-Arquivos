@@ -141,7 +141,7 @@ body {
 }
 
 .login-branding .brand-logo {
-    background-image: url('../assets/logo.png'); 
+    background-image: url('../assets/logos/logo.png'); 
     background-size: contain;
     background-repeat: no-repeat;
     height: 130px;
@@ -151,7 +151,7 @@ body {
 }
 
 .login-branding .brand-slogan {
-    background-image: url('../assets/frase.png');
+    background-image: url('../assets/logos/frase.png');
     background-repeat: no-repeat;
     height: 190px;
     width: 100%;

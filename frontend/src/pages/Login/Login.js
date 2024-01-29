@@ -1,5 +1,10 @@
-import React, { useState } from "react";
-import "../../styles/Login.css"; // Certifique-se de que este caminho está correto
+import React, { useState, useEffect } from "react";
+import "../../styles/Login.css";
+import {
+  saveUserCredentials,
+  getUserCredentials,
+  saveUserData,
+} from "../../utils/cookieManager";
 import userService from "../../services/userService"; // Seu caminho real para userService
 import showPasswordIcon from "../../assets/Icons/showPassword.png";
 import hidePasswordIcon from "../../assets/Icons/hidePassword.png";
@@ -7,13 +12,30 @@ import hidePasswordIcon from "../../assets/Icons/hidePassword.png";
 function Login({ onLogin }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [hidePassword, setHidePassword] = useState(hidePasswordIcon);
+
+  useEffect(() => {
+    // Verificar se há credenciais salvas ao iniciar o componente
+    const { savedEmail, savedPassword, savedRememberMe } = getUserCredentials();
+
+    if (savedRememberMe === "true" && savedEmail && savedPassword) {
+      setEmail(savedEmail);
+      setPassword(savedPassword);
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleLogin = async () => {
     try {
       const data = await userService.login(email, password);
+
+      // Salvar credenciais se "lembrar-me" estiver ativado
+      saveUserCredentials(email, password, rememberMe);
+      saveUserData(data);
+
+      onLogin(data);
     } catch (error) {
       console.error(error.message);
     }
@@ -55,9 +77,9 @@ function Login({ onLogin }) {
           <div className="login-remember">
             <input
               type="checkbox"
-              id="remember"
-              checked={remember}
-              onChange={(e) => setRemember(e.target.checked)}
+              id="rememberMe"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
             />
             <label htmlFor="remember">Remember</label>
             <a href="#" className="forgot-password">

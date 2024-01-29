@@ -64,7 +64,7 @@ const userController = {
       const existingUser = await User.findOne({ where: { email } });
 
       if (existingUser) {
-        return res.status(400).json({ mensagem: "Email já está em uso." });
+        return res.status(400).json({ message: "Email já está em uso." });
       }
 
       const newUser = await User.create({ name, email, nivel });
@@ -83,24 +83,24 @@ const userController = {
       const user = await User.findOne({ where: { Email } });
 
       if (!user) {
-        return res.status(404).json({ mensagem: "Usuário não encontrado" });
+        return res.status(404).json({ message: "Usuário não encontrado" });
       }
 
       if (!user.senhaDefinida) {
-        return res.status(200).json({ mensagem: "Redefinir a senha" });
+        return res.status(200).json({ message: "Redefinir a senha" });
       }
 
       const passwordMatch = await bcrypt.compare(Password, user.Password);
 
       if (!passwordMatch) {
-        return res.status(401).json({ mensagem: "Credenciais inválidas" });
+        return res.status(401).json({ message: "Credenciais inválidas" });
       }
 
       const token = jwt.sign({ userId: user.id }, "seu_segredo_secreto", {
         expiresIn: "1h",
       });
 
-      res.json({ token, data: user });
+      res.json({ token, data: user, message: "Login realizado com sucesso!" });
     } catch (error) {
       res.status(500).json({ error: "Erro ao fazer login" });
     }

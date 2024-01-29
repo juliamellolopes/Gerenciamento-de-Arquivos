@@ -27,8 +27,6 @@ const userService = {
       throw new Error(error.response.data.error || "Erro ao cadastrar usuário");
     }
   },
-
-  // Outros métodos para redefinir senha, etc.
 };
 
 export default userService;
