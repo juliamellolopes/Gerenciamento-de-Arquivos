@@ -30,3 +30,9 @@ export const getUserData = () => {
   const userDataString = Cookies.get("userData");
   return userDataString ? JSON.parse(userDataString) : null;
 };
+
+export const isAuthenticated = () => {
+  // Adicione sua lógica de autenticação aqui
+  const userData = getUserData();
+  return !!userData;
+};

@@ -27,6 +27,30 @@ const userService = {
       throw new Error(error.response.data.error || "Erro ao cadastrar usuário");
     }
   },
+
+  async redefinirSenha(novaSenha, confirmarSenha, user) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/redefinir-senha`, {
+        novaSenha,
+        confirmarSenha,
+        user,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error || "Erro ao redefinir senha");
+    }
+  },
+
+  async pesquisarUser(email) {
+    try {
+      const response = await axios.post(`${API_BASE_URL}/pesquisar-User`, {
+        email,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response.data.error || "Erro ao encontrar usuário");
+    }
+  },
 };
 
 export default userService;

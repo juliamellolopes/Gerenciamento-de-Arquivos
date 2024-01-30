@@ -16,7 +16,6 @@ const Notification = ({ type, message, visible }) => {
     if (visible) {
       toast[type](
         <div>
-          {iconMap[type]}
           <span>{message}</span>
         </div>,
         {

@@ -1,36 +1,35 @@
 import React from "react";
-import LoginForm from "./pages/Login/Login";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { getUserCredentials } from "./utils/cookieManager";
+import PrivateRoute from "./utils/PrivateRoute";
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/Login";
+import ForgotPassword from "./pages/Login/ForgotPassword";
 
 const App = () => {
+  // Verificar se há credenciais salvas ao iniciar o aplicativo
+  const { savedRememberMe } = getUserCredentials();
+
   return (
-    <div>
-      <LoginForm />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+        <Route
+          path="/login"
+          element={
+            savedRememberMe === "true" ? <Navigate to="/home" /> : <Login />
+          }
+        />
+        <Route path="/" element={<Navigate to="/login" />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+      </Routes>
+    </Router>
   );
 };
 
 export default App;
-
-//// App.js
-//import React from "react";
-//import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-//import { AuthProvider } from "./AuthContext"; // Certifique-se de ajustar o caminho conforme necessário
-//import PrivateRoute from "./PrivateRoute"; // Certifique-se de ajustar o caminho conforme necessário
-//import Home from "./Home";
-//import Login from "./Login";
-
-//const App = () => {
-//  return (
-//    <AuthProvider>
-//      <Router>
-//        <Switch>
-//          <PrivateRoute path="/home" component={Home} />
-//          <Route path="/login" component={Login} />
-//          <Redirect from="/" to="/login" />
-//        </Switch>
-//      </Router>
-//    </AuthProvider>
-//  );
-//};
-
-//export default App;

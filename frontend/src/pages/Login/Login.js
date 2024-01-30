@@ -3,6 +3,7 @@ import {
   saveUserCredentials,
   getUserCredentials,
   saveUserData,
+  isAuthenticated,
 } from "../../utils/cookieManager";
 import validateServices from "../../utils/validateServices";
 import userService from "../../services/userService";
@@ -10,6 +11,7 @@ import showPasswordIcon from "../../assets/Icons/showPassword.png";
 import hidePasswordIcon from "../../assets/Icons/hidePassword.png";
 import Notification from "../../components/Notification/Notification";
 import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import "../../styles/Login.css";
 
@@ -25,6 +27,8 @@ function Login() {
     message: "",
     visible: false,
   });
+
+  const navigate = useNavigate();
 
   const showNotification = (type, message) => {
     setNotification({
@@ -47,21 +51,29 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      //// Validar dados antes de prosseguir
+      // Validar dados antes de prosseguir
       validateServices.validateUserData(email, password);
 
-      //// Continuar com a lógica de login se a validação passar
-      const data = await userService.login(email, password);
+      // Continuar com a lógica de login se a validação passar
+      const userData = await userService.login(email, password);
 
-      //// Salvar credenciais se "lembrar-me" estiver ativado
+      // Salvar credenciais se "lembrar-me" estiver ativado
       saveUserCredentials(email, password, rememberMe);
-      saveUserData(data);
+      saveUserData(userData);
 
-      showNotification("success", data.message);
+      showNotification("success", userData.message);
+
+      // Redirecionar após o login bem-sucedido
+      navigate(`/dashboard`);
     } catch (error) {
       showNotification("error", error.message);
     }
   };
+
+  if (isAuthenticated()) {
+    // Redirecionar ou fazer algo se já estiver autenticado
+    navigate(`/dashboard`);
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -104,11 +116,11 @@ function Login() {
               onChange={(e) => setRememberMe(e.target.checked)}
             />
             <label htmlFor="remember">Remember</label>
-            <a href="#" className="forgot-password">
+            <a href="/forgot-password" className="forgot-password">
               forgot password?
             </a>
           </div>
-          <button onClick={handleLogin}>Log in</button>
+          <button onClick={handleLogin}>Login</button>
         </div>
         <div className="login-branding">
           <div className="brand-logo"> </div>

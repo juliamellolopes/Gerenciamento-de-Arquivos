@@ -41,10 +41,11 @@ router.put("/editarPasta/:userId/:pastaId", folderController.editarPasta);
 //User
 router.post("/cadastrar", userController.cadastrarUser);
 router.post("/login", userController.login);
-router.post("/redefinir-senha", userController.redefinirSenha);
+router.put("/redefinir-senha", userController.redefinirSenha);
 router.get(
   "/usuarios/:userId/pastas-arquivos",
   userController.listarPastasArquivos
 );
+router.post("/pesquisar-User", userController.pesquisarUser);
 
 module.exports = router;

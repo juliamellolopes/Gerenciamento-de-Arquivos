@@ -1,16 +1,14 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import { useAuth } from "./AuthContext"; // Certifique-se de ajustar o caminho conforme necessário
+import { Route, Navigate } from "react-router-dom";
+import { isAuthenticated } from "./cookieManager";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { user } = useAuth();
+  const { user } = isAuthenticated();
 
   return (
     <Route
       {...rest}
-      render={(props) =>
-        user ? <Component {...props} /> : <Redirect to="/login" />
-      }
+      element={user ? <Component /> : <Navigate to="/login" replace />}
     />
   );
 };
