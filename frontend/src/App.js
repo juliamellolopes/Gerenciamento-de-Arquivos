@@ -10,6 +10,7 @@ import PrivateRoute from "./utils/PrivateRoute";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import ForgotPassword from "./pages/Login/ForgotPassword";
+//import Gerenciamento from "./pages/Gerenciamento/Gerenciamento";
 
 const App = () => {
   // Verificar se há credenciais salvas ao iniciar o aplicativo
@@ -27,6 +28,7 @@ const App = () => {
         />
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        {/*<Route path="gerenciamento" element={<Gerenciamento />} />*/}
       </Routes>
     </Router>
   );
