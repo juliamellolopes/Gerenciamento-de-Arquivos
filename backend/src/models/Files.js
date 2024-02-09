@@ -1,10 +1,10 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const Folder = require("./Folder");
-const User = require("./User");
+const Folders = require("./Folders");
+const Users = require("./Users");
 
-const File = sequelize.define(
-  "File",
+const Files = sequelize.define(
+  "Files",
   {
     fileName: {
       type: DataTypes.STRING,
@@ -38,7 +38,7 @@ const File = sequelize.define(
   }
 );
 
-File.belongsTo(Folder); // Estabelecendo relação com Pastas
-File.belongsTo(User); // Estabelecendo relação com Usuários
+Files.belongsTo(Folders); // Estabelecendo relação com Pastas
+Files.belongsTo(Users); // Estabelecendo relação com Usuários
 
-module.exports = File;
+module.exports = Files;

@@ -1,6 +1,6 @@
 const express = require("express");
-const sequelize = require("./config/database");
-const router = require("./routes/index");
+const sequelize = require("./src/config/database");
+const router = require("./src/routes/index");
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.use(express.json()); // Habilita o uso de JSON nas requisições
 async function inicializarBancoDeDados() {
   try {
     // Sincronize os modelos com o banco de dados
-    await sequelize.sync(/* { force: true } */); // Use { force: true } para recriar as tabelas (em desenvolvimento)
+    await sequelize.sync(); // Use { force: true } para recriar as tabelas (em desenvolvimento)
 
     console.log("Tabelas criadas com sucesso!");
   } catch (error) {

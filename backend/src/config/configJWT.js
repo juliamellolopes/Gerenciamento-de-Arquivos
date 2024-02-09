@@ -1,11 +1,11 @@
-import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
-const secretKey = crypto.randomBytes(64).toString('hex');
+const secretKey = crypto.randomBytes(64).toString("hex");
 
 // Função para gerar um token JWT
 function generateToken(userId) {
-  const token = jwt.sign({ userId }, secretKey, { expiresIn: '1h' }); // Pode ajustar o tempo de expiração conforme necessário
+  const token = jwt.sign({ userId }, secretKey, { expiresIn: "1h" }); // Pode ajustar o tempo de expiração conforme necessário
   return token;
 }
 
@@ -19,4 +19,4 @@ function verifyToken(token) {
   }
 }
 
-export {generateToken, verifyToken}
+module.exports = { generateToken, verifyToken };

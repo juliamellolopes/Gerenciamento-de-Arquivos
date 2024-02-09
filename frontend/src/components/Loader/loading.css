@@ -1,0 +1,52 @@
+.loading-overlay {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 9999;
+}
+
+.svg-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-svg {
+    fill: none;
+    stroke-width: 5px;
+    stroke-linecap: round;
+    stroke: rgb(64, 0, 148);
+}
+
+.loader-svg.bg {
+    stroke-width: 8px;
+    stroke: rgb(207, 205, 245);
+}
+
+.animate {
+    stroke-dasharray: 242.6;
+    animation: fill-animation 1s cubic-bezier(1, 1, 1, 1) 0s infinite;
+}
+
+@keyframes fill-animation {
+    0% {
+        stroke-dasharray: 40 242.6;
+        stroke-dashoffset: 0;
+    }
+
+    50% {
+        stroke-dasharray: 141.3;
+        stroke-dashoffset: 141.3;
+    }
+
+    100% {
+        stroke-dasharray: 40 242.6;
+        stroke-dashoffset: 282.6;
+    }
+}

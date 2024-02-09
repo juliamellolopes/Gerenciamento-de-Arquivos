@@ -1,4 +1,7 @@
-const { Permission, User, File } = require("../models");
+const { Permissions } = require("../models/Permissions.js");
+const { Files } = require("../models/Files.js");
+const { Users } = require("../models/Users.js");
+const { Folders } = require("../models/Folders.js");
 
 const permissoesController = {
   async cadastrarPermissaoArquivo(req, res) {
@@ -6,7 +9,7 @@ const permissoesController = {
 
     try {
       // Verifica se o usuário existe e tem permissão para atribuir permissões
-      const user = await User.findByPk(userId);
+      const user = await Users.findByPk(userId);
 
       if (!user || user.accessLevel > 2) {
         return res
@@ -15,13 +18,13 @@ const permissoesController = {
       }
 
       // Verifica se o arquivo existe
-      const file = await File.findByPk(fileId);
+      const file = await Files.findByPk(fileId);
 
       if (!file) {
         return res.status(404).json({ mensagem: "Arquivo não encontrado" });
       }
 
-      const novaPermissao = await Permission.create({
+      const novaPermissao = await Permissions.create({
         userId,
         fileId,
         accessLevel,
@@ -43,7 +46,7 @@ const permissoesController = {
 
     try {
       // Verifica se o usuário existe e tem permissão para atribuir permissões
-      const user = await User.findByPk(userId);
+      const user = await Users.findByPk(userId);
 
       if (!user || user.accessLevel > 2) {
         return res
@@ -52,13 +55,13 @@ const permissoesController = {
       }
 
       // Verifica se a pasta existe
-      const folder = await Folder.findByPk(folderId);
+      const folder = await Folders.findByPk(folderId);
 
       if (!folder) {
         return res.status(404).json({ mensagem: "Pasta não encontrada" });
       }
 
-      const novaPermissao = await Permission.create({
+      const novaPermissao = await Permissions.create({
         userId,
         folderId,
         accessLevel,

@@ -1,4 +1,5 @@
-const { Folder, User } = require("../models"); // Importe os modelos apropriados
+const { Folders } = require("../models/Folders.js"); // Importe os modelos apropriados
+const { Users } = require("../models/Users.js");
 
 const folderController = {
   // Criar uma nova pasta
@@ -6,11 +7,11 @@ const folderController = {
     const { userId, nomePasta } = req.body;
 
     try {
-      const usuario = await User.findByPk(userId);
+      const usuario = await Users.findByPk(userId);
 
       if (usuario.nivelAcesso <= 2) {
         // Níveis 1 e 2 têm permissão para criar pasta
-        const novaPasta = await Folder.create({ nome: nomePasta });
+        const novaPasta = await Folders.create({ nome: nomePasta });
         res
           .status(201)
           .json({ data: novaPasta, mensagem: "Pasta criada com sucesso" });
@@ -27,8 +28,8 @@ const folderController = {
     const { userId, pastaId } = req.params;
 
     try {
-      const usuario = await User.findByPk(userId);
-      const pasta = await Folder.findByPk(pastaId);
+      const usuario = await Users.findByPk(userId);
+      const pasta = await Folders.findByPk(pastaId);
 
       if (!pasta) {
         return res.status(404).json({ mensagem: "Pasta não encontrada" });
@@ -52,8 +53,8 @@ const folderController = {
     const { novoNome } = req.body;
 
     try {
-      const usuario = await User.findByPk(userId);
-      const pasta = await Folder.findByPk(pastaId);
+      const usuario = await Users.findByPk(userId);
+      const pasta = await Folders.findByPk(pastaId);
 
       if (!pasta) {
         return res.status(404).json({ mensagem: "Pasta não encontrada" });

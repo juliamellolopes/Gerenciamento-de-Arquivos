@@ -5,16 +5,16 @@ import {
   Routes,
   Navigate,
 } from "react-router-dom";
-import { getUserCredentials } from "./utils/cookieManager";
+import { authenticateUser } from "./utils/cookieManager";
 import PrivateRoute from "./utils/PrivateRoute";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import ForgotPassword from "./pages/Login/ForgotPassword";
-//import Gerenciamento from "./pages/Gerenciamento/Gerenciamento";
+import GerenciamentoDeArquivos from "./pages/Gerenciamento/Gerenciamento";
 
 const App = () => {
   // Verificar se há credenciais salvas ao iniciar o aplicativo
-  const { savedRememberMe } = getUserCredentials();
+  const { user } = authenticateUser();
 
   return (
     <Router>
@@ -22,13 +22,14 @@ const App = () => {
         <Route path="/home" element={<PrivateRoute element={<Home />} />} />
         <Route
           path="/login"
-          element={
-            savedRememberMe === "true" ? <Navigate to="/home" /> : <Login />
-          }
+          element={user === "true" ? <Navigate to="/home" /> : <Login />}
         />
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
-        {/*<Route path="gerenciamento" element={<Gerenciamento />} />*/}
+        <Route
+          path="/gerenciamento"
+          element={<PrivateRoute element={<GerenciamentoDeArquivos />} />}
+        />
       </Routes>
     </Router>
   );

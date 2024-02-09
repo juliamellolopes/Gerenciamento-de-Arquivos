@@ -1,22 +1,24 @@
-const { File, User, VersionHistory } = require("../models");
-const s3 = require("../config/configAWS");
+const { Files } = require("../models/Files.js");
+const { Users } = require("../models/Users.js");
+const { VersionHistory } = require("../models/VersionHistory.js");
+//const s3 = require("../config/configAWS");
 
 const filesController = {
   async criarArquivo(req, res) {
     const { userId, pastaId, nomeArquivo } = req.body;
 
     try {
-      const usuario = await User.findByPk(userId);
+      const usuario = await Users.findByPk(userId);
 
       if (usuario.nivelAcesso <= 2) {
         // Operação no S3: enviar arquivo
-        const params = {
-          Bucket: "NOME_DO_BUCKET",
-          Key: pastaId + "/" + nomeArquivo, // Nome do arquivo no S3
-          Body: "CONTEÚDO_DO_ARQUIVO", // Pode ser um buffer, um stream ou uma string
-        };
+        //const params = {
+        //  Bucket: "NOME_DO_BUCKET",
+        //  Key: pastaId + "/" + nomeArquivo, // Nome do arquivo no S3
+        //  Body: "CONTEÚDO_DO_ARQUIVO", // Pode ser um buffer, um stream ou uma string
+        //};
 
-        await s3.upload(params).promise();
+        //await s3.upload(params).promise();
 
         // Criar o registro do arquivo no banco de dados
         await File.create({ nome: nomeArquivo, pastaId });
@@ -34,8 +36,8 @@ const filesController = {
     const { userId, arquivoId } = req.params;
 
     try {
-      const usuario = await User.findByPk(userId);
-      const arquivo = await File.findByPk(arquivoId);
+      const usuario = await Users.findByPk(userId);
+      const arquivo = await Files.findByPk(arquivoId);
 
       if (!arquivo) {
         return res.status(404).json({ mensagem: "Arquivo não encontrado" });
@@ -43,12 +45,12 @@ const filesController = {
 
       if (usuario.nivelAcesso <= 1) {
         // Operação no S3: deletar arquivo
-        const params = {
-          Bucket: "NOME_DO_BUCKET",
-          Key: arquivo.pastaId + "/" + arquivo.nome, // Localização do arquivo no S3
-        };
+        //const params = {
+        //  Bucket: "NOME_DO_BUCKET",
+        //  Key: arquivo.pastaId + "/" + arquivo.nome, // Localização do arquivo no S3
+        //};
 
-        await s3.deleteObject(params).promise();
+        //await s3.deleteObject(params).promise();
 
         // Deletar o registro do arquivo no banco de dados
         await arquivo.destroy();
@@ -68,8 +70,8 @@ const filesController = {
     const { userId, arquivoId } = req.params;
 
     try {
-      const usuario = await User.findByPk(userId);
-      const arquivo = await File.findByPk(arquivoId);
+      const usuario = await Users.findByPk(userId);
+      const arquivo = await Files.findByPk(arquivoId);
 
       if (!arquivo) {
         return res.status(404).json({ mensagem: "Arquivo não encontrado" });
@@ -77,12 +79,12 @@ const filesController = {
 
       if (usuario.nivelAcesso <= 3) {
         // Operação no S3: baixar arquivo
-        const params = {
-          Bucket: "NOME_DO_BUCKET",
-          Key: arquivo.pastaId + "/" + arquivo.nome, // Localização do arquivo no S3
-        };
+        //const params = {
+        //  Bucket: "NOME_DO_BUCKET",
+        //  Key: arquivo.pastaId + "/" + arquivo.nome, // Localização do arquivo no S3
+        //};
 
-        const data = await s3.getObject(params).promise();
+        //const data = await s3.getObject(params).promise();
         // Realize o tratamento dos dados como necessário
         // Aqui você pode enviar o arquivo ou manipular os dados antes de enviar
 
@@ -101,8 +103,8 @@ const filesController = {
     const novaVersao = req.body.novaVersao; // Receba a nova versão do arquivo do corpo da requisição
 
     try {
-      const usuario = await User.findByPk(userId);
-      const arquivo = await File.findByPk(arquivoId);
+      const usuario = await Users.findByPk(userId);
+      const arquivo = await Files.findByPk(arquivoId);
 
       if (!arquivo) {
         return res.status(404).json({ mensagem: "Arquivo não encontrado" });
@@ -110,22 +112,22 @@ const filesController = {
 
       if (usuario.nivelAcesso <= 2) {
         // Operação no S3: fazer backup da versão antiga
-        const paramsBackup = {
-          Bucket: "NOME_DO_BUCKET",
-          Key: arquivo.pastaId + "/" + arquivo.nome + "_backup", // Nome do arquivo de backup no S3
-          Body: "CONTEÚDO_DA_VERSAO_ANTIGA", // Pode ser um buffer, um stream ou uma string
-        };
+        //const paramsBackup = {
+        //  Bucket: "NOME_DO_BUCKET",
+        //  Key: arquivo.pastaId + "/" + arquivo.nome + "_backup", // Nome do arquivo de backup no S3
+        //  Body: "CONTEÚDO_DA_VERSAO_ANTIGA", // Pode ser um buffer, um stream ou uma string
+        //};
 
-        await s3.upload(paramsBackup).promise();
+        //await s3.upload(paramsBackup).promise();
 
         // Operação no S3: atualizar arquivo com a nova versão
-        const paramsAtualizacao = {
-          Bucket: "NOME_DO_BUCKET",
-          Key: arquivo.pastaId + "/" + arquivo.nome, // Localização do arquivo no S3
-          Body: novaVersao, // Nova versão do arquivo
-        };
+        //const paramsAtualizacao = {
+        //  Bucket: "NOME_DO_BUCKET",
+        //  Key: arquivo.pastaId + "/" + arquivo.nome, // Localização do arquivo no S3
+        //  Body: novaVersao, // Nova versão do arquivo
+        //};
 
-        await s3.upload(paramsAtualizacao).promise();
+        //await s3.upload(paramsAtualizacao).promise();
 
         // Atualizar a versão no banco de dados
         arquivo.versionNumber++;

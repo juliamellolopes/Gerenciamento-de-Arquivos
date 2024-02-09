@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Navigate } from "react-router-dom";
-import { isAuthenticated } from "./cookieManager";
+import { authenticateUser } from "./AuthenticateUser";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { user } = isAuthenticated();
+  const { user } = authenticateUser();
 
   return (
     <Route

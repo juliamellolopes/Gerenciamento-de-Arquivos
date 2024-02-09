@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const Users = require("../models/Users");
+const Users = require("../models/Users.js");
+const { generateToken } = require("../config/configJWT.js");
 
 async function listarPastasArquivosAcessiveis(userId, pastaId = null) {
   try {
@@ -57,17 +58,22 @@ async function listarPastasArquivosAcessiveis(userId, pastaId = null) {
 
 const userController = {
   async cadastrarUser(req, res) {
-    const { name, email, nivel } = req.body;
+    const { dados } = req.body;
 
     try {
       // Verificar se o email já está em uso
-      const existingUser = await Users.findOne({ where: { email } });
+      const existingUser = await Users.findOne({
+        where: { email: dados.email },
+      });
 
       if (existingUser) {
         return res.status(400).json({ message: "Email já está em uso." });
       }
 
-      const newUser = await Users.create({ name, email, nivel });
+      // Criptografar a senha do colaborador antes de armazenar no banco
+      const senha = await bcrypt.hash(dados.senha, 10);
+
+      const newUser = await Users.create({ ...dados, senha: senha });
       res
         .status(201)
         .json({ data: newUser, mesagem: "User cadastrado com sucesso." });
@@ -77,10 +83,10 @@ const userController = {
   },
 
   async login(req, res) {
-    const { Email, Password } = req.body;
+    const { dados } = req.body;
 
     try {
-      const user = await Users.findOne({ where: { Email } });
+      const user = await Users.findOne({ where: { email: dados.email } });
 
       if (!user) {
         return res.status(404).json({ message: "Usuário não encontrado" });
@@ -90,34 +96,32 @@ const userController = {
         return res.status(200).json({ message: "Redefinir a senha" });
       }
 
-      const passwordMatch = await bcrypt.compare(Password, user.Password);
+      const passwordMatch = await bcrypt.compare(password, user.password);
 
       if (!passwordMatch) {
         return res.status(401).json({ message: "Credenciais inválidas" });
       }
 
-      const token = jwt.sign({ userId: user.id }, "seu_segredo_secreto", {
-        expiresIn: "1h",
-      });
+      const token = generateToken({ id: usuario.id });
 
-      res.json({ token, data: user, message: "Login realizado com sucesso!" });
+      res.status(200).json({ token, message: "Login realizado com sucesso!" });
     } catch (error) {
-      res.status(500).json({ error: "Erro ao fazer login" });
+      res.status(500).json({ message: "Erro ao fazer login" });
     }
   },
 
   async redefinirSenha(req, res) {
-    const { novaSenha, confirmarSenha, user } = req.body;
-
-    if (novaSenha !== confirmarSenha) {
-      return res.status(400).send("As senhas não correspondem");
-    }
+    const { dados } = req.body;
 
     try {
-      const userId = Users.findAll({ where: { user } });
+      if (dados.novaSenha !== dados.confirmarSenha) {
+        return res.status(400).send("As senhas não correspondem");
+      }
+
+      const userId = Users.findAll({ where: { user: dados.user } });
 
       // Gere um hash para a nova senha antes de salvá-la no banco de dados
-      const hashedPassword = await bcrypt.hash(novaSenha, 10);
+      const hashedPassword = await bcrypt.hash(dados.novaSenha, 10);
 
       // Atualize a senha do usuário no banco de dados usando o ID do usuário
       await Users.update(
@@ -125,12 +129,11 @@ const userController = {
         { where: { id: userId.id } }
       );
 
-      res.json({
-        id: userId.id,
+      res.status(200).json({
         message: "Redefinição se senha realizada com sucesso!",
       });
     } catch (error) {
-      res.status(500).json({ error: "Erro ao redefinir a senha" });
+      res.status(500).json({ message: "Erro ao redefinir a senha" });
     }
   },
 
@@ -138,27 +141,24 @@ const userController = {
     const { userId } = req.params;
 
     try {
-      const pastasArquivosAcessiveis = await listarPastasArquivosAcessiveis(
-        userId
-      );
+      const pastasArquivosAcessiveis =
+        await listarPastasArquivosAcessiveis(userId);
       res.status(200).json({ pastasArquivosAcessiveis });
     } catch (error) {
       res.status(500).json({ error: "Erro ao listar pastas e arquivos" });
     }
   },
 
-  async pesquisarUser(req, res) {
-    const { email } = req.body;
-    try {
-      const user = await Users.findOne({ where: { email } });
+  //async pesquisarUser(req, res) {
+  //  const { email } = req.body;
+  //  try {
+  //    const user = await Users.findOne({ where: { email } });
 
-      res
-        .status(201)
-        .json({ data: user.id, mesagem: "User encontrado com sucesso." });
-    } catch (error) {
-      res.status(500).json({ error: "Erro ao encontrar usuário" });
-    }
-  },
+  //    res.status(201).json({ user, mesagem: "User encontrado com sucesso." });
+  //  } catch (error) {
+  //    res.status(500).json({ error: "Erro ao encontrar usuário" });
+  //  }
+  //},
 };
 
 module.exports = userController;

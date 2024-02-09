@@ -12,6 +12,8 @@ import hidePasswordIcon from "../../assets/Icons/hidePassword.png";
 import Notification from "../../components/Notification/Notification";
 import { ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { authenticateUser } from "../../utils/AuthenticateUser";
+import Loader from "../../components/Loader/loading";
 
 import "../../styles/Login.css";
 
@@ -21,6 +23,7 @@ function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [hidePassword, setHidePassword] = useState(hidePasswordIcon);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [notification, setNotification] = useState({
     type: "",
@@ -63,12 +66,25 @@ function Login() {
 
       showNotification("success", userData.message);
 
-      // Redirecionar após o login bem-sucedido
-      navigate(`/dashboard`);
+      const { token } = userData.data; // Extrai o token da resposta
+      localStorage.setItem("token", token); // Armazena o token no localStorage
+
+      if (authenticateUser()) {
+        // Redirecionar após o login bem-sucedido
+        navigate(`/dashboard`);
+      } else {
+        //mensagem de erro
+      }
     } catch (error) {
       showNotification("error", error.message);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   if (isAuthenticated()) {
     // Redirecionar ou fazer algo se já estiver autenticado
@@ -138,3 +154,29 @@ function Login() {
 }
 
 export default Login;
+
+//import { getUserIdFromCookie, setUserIdInCookie } from "./authUtils.js";
+//import axios from "axios";
+
+//async function login(email, senha) {
+//  try {
+//    const response = await axios.post("http://localhost:3003/api/login", {
+//      email,
+//      senha,
+//    });
+//    const { token } = response.data; // Extrai o token da resposta
+//    localStorage.setItem("token", token); // Armazena o token no localStorage
+
+//    if (authenticateUser()) {
+//      // Redireciona o usuário para outra página
+//      window.location.href = "outraPagina.html";
+//    } else {
+//      //mensagem de erro
+//    }
+//  } catch (error) {
+//    console.error("Erro ao fazer login:", error);
+//  }
+//}
+
+//// Exemplo de uso para obter o userId do cookie
+//const userId = getUserIdFromCookie();

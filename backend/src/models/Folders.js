@@ -1,9 +1,9 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const User = require("./User");
+const Users = require("./Users");
 
-const Folder = sequelize.define(
-  "Folder",
+const Folders = sequelize.define(
+  "Folders",
   {
     folderName: {
       type: DataTypes.STRING,
@@ -24,7 +24,7 @@ const Folder = sequelize.define(
   }
 );
 
-Folder.belongsTo(User); // Estabelecendo relação com Usuários
-Folder.hasMany(Folder, { as: "Subfolders", foreignKey: "ParentFolderId" }); // Relacionamento de autoassociação
+Folders.belongsTo(Users); // Estabelecendo relação com Usuários
+Folders.hasMany(Folders, { as: "Subfolders", foreignKey: "ParentFolderId" }); // Relacionamento de autoassociação
 
-module.exports = Folder;
+module.exports = Folders;

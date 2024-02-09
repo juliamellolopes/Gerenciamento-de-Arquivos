@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
 
-const User = sequelize.define(
-  "User",
+const Users = sequelize.define(
+  "Users",
   {
     // Campos do modelo de Usuários
     name: {
@@ -32,7 +32,7 @@ const User = sequelize.define(
       defaultValue: false, // Por padrão, a senha não está definida
     },
     nivelAcesso: {
-      type: DataTypes.INTERGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: "3", // Padrão para novo usuário
     },
@@ -45,4 +45,4 @@ const User = sequelize.define(
   }
 );
 
-module.exports = User;
+module.exports = Users;

@@ -1,5 +1,6 @@
-const { VersionHistory } = require("../models"); // Importe os modelos apropriados
-const s3 = require("../config/configAWS");
+const { VersionHistory } = require("../models/VersionHistory.js"); // Importe os modelos apropriados
+//const s3 = require("../config/configAWS");
+const Files = require("../models/Files.js");
 
 const versionsController = {
   async downloadFile(req, res) {
@@ -14,12 +15,12 @@ const versionsController = {
           .json({ mensagem: "Arquivo antigo não encontrado" });
       }
 
-      const params = {
-        Bucket: "SEU_BUCKET_NAME",
-        Key: versionHistory.arquivoAntigoKey, // chave do arquivo no S3
-      };
+      //const params = {
+      //  Bucket: "SEU_BUCKET_NAME",
+      //  Key: versionHistory.arquivoAntigoKey, // chave do arquivo no S3
+      //};
 
-      const fileStream = s3.getObject(params).createReadStream();
+      //const fileStream = s3.getObject(params).createReadStream();
       fileStream.pipe(res);
     } catch (error) {
       res.status(500).json({ error: "Erro ao buscar o arquivo antigo" });
@@ -31,7 +32,7 @@ const versionsController = {
 
     try {
       // Encontre o arquivo pelo ID
-      const file = await File.findByPk(fileId);
+      const file = await Files.findByPk(fileId);
 
       if (!file) {
         return res.status(404).json({ mensagem: "Arquivo não encontrado" });

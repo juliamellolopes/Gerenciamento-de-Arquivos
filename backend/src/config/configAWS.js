@@ -6,4 +6,4 @@ const s3 = new AWS.S3({
   region: "SUA_REGIÃO",
 });
 
-export { s3 };
+module.exports = s3;

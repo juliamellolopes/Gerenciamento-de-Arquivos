@@ -1,6 +1,6 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../config/database");
-const File = require("./File");
+const Files = require("./Files");
 
 const VersionHistory = sequelize.define("VersionHistory", {
   versionNumber: {
@@ -22,6 +22,6 @@ const VersionHistory = sequelize.define("VersionHistory", {
   },
 });
 
-VersionHistory.belongsTo(File);
+VersionHistory.belongsTo(Files);
 
 module.exports = VersionHistory;
