@@ -3,7 +3,6 @@ import {
   saveUserCredentials,
   getUserCredentials,
   saveUserData,
-  isAuthenticated,
 } from "../../utils/cookieManager";
 import validateServices from "../../utils/validateServices";
 import userService from "../../services/userService";
@@ -57,23 +56,24 @@ function Login() {
       // Validar dados antes de prosseguir
       validateServices.validateUserData(email, password);
 
-      // Continuar com a lógica de login se a validação passar
-      const userData = await userService.login(email, password);
+      const dados = { email, password };
 
       // Salvar credenciais se "lembrar-me" estiver ativado
       saveUserCredentials(email, password, rememberMe);
+
+      const userData = await userService.login(dados);
       saveUserData(userData);
 
-      showNotification("success", userData.message);
+      showNotification("success", userData.data.message);
 
-      const { token } = userData.data; // Extrai o token da resposta
+      const token = userData.data.token; // Extrai o token da resposta
       localStorage.setItem("token", token); // Armazena o token no localStorage
 
       if (authenticateUser()) {
         // Redirecionar após o login bem-sucedido
-        navigate(`/dashboard`);
+        navigate(`/gerenciamento`);
       } else {
-        //mensagem de erro
+        showNotification("error", "Não foi possivel mudar de pagina");
       }
     } catch (error) {
       showNotification("error", error.message);
@@ -85,12 +85,6 @@ function Login() {
   if (isLoading) {
     return <Loader />;
   }
-
-  if (isAuthenticated()) {
-    // Redirecionar ou fazer algo se já estiver autenticado
-    navigate(`/dashboard`);
-  }
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
     setHidePassword(showPassword ? hidePasswordIcon : showPasswordIcon);

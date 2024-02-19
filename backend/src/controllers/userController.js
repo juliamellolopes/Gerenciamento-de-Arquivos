@@ -58,9 +58,9 @@ async function listarPastasArquivosAcessiveis(userId, pastaId = null) {
 
 const userController = {
   async cadastrarUser(req, res) {
-    const { dados } = req.body;
-
     try {
+      const dados = req.body;
+
       // Verificar se o email já está em uso
       const existingUser = await Users.findOne({
         where: { email: dados.email },
@@ -71,9 +71,9 @@ const userController = {
       }
 
       // Criptografar a senha do colaborador antes de armazenar no banco
-      const senha = await bcrypt.hash(dados.senha, 10);
+      const password = await bcrypt.hash(dados.password, 10);
 
-      const newUser = await Users.create({ ...dados, senha: senha });
+      const newUser = await Users.create({ ...dados, password: password });
       res
         .status(201)
         .json({ data: newUser, mesagem: "User cadastrado com sucesso." });
@@ -83,9 +83,9 @@ const userController = {
   },
 
   async login(req, res) {
-    const { dados } = req.body;
-
     try {
+      const dados = req.body;
+
       const user = await Users.findOne({ where: { email: dados.email } });
 
       if (!user) {
@@ -96,13 +96,13 @@ const userController = {
         return res.status(200).json({ message: "Redefinir a senha" });
       }
 
-      const passwordMatch = await bcrypt.compare(password, user.password);
+      const passwordMatch = await bcrypt.compare(dados.password, user.password);
 
       if (!passwordMatch) {
         return res.status(401).json({ message: "Credenciais inválidas" });
       }
 
-      const token = generateToken({ id: usuario.id });
+      const token = generateToken({ id: user.id });
 
       res.status(200).json({ token, message: "Login realizado com sucesso!" });
     } catch (error) {

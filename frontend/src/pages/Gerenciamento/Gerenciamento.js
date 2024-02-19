@@ -8,15 +8,20 @@ import React, { useState, useEffect } from "react";
 //import iconeNovoArquivo from "../../assets/icons/mais.png";
 //import logo from "../../assets/logos/retangular.png";
 import { getUserIdFromCookie } from "../../utils/AuthenticateUser";
+import TopNavBar from "../../components/NavBar/NavBar";
 
 import "../../styles/Gerenciamento.css";
 
 function GerenciamentoDeArquivos() {
   const userData = getUserIdFromCookie();
+  console.log(userData);
 
   return (
     <div>
-      <p>Bem-vindo {userData}</p>
+      <TopNavBar />
+      <div className="content-below-navbar">
+        <p>Bem-vindo {userData}</p>
+      </div>
     </div>
   );
 }

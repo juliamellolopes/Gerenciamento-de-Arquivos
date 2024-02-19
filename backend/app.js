@@ -1,11 +1,13 @@
 const express = require("express");
 const sequelize = require("./src/config/database");
 const router = require("./src/routes/index");
+const cors = require("cors");
 
 const app = express();
 
 // Middlewares e configurações do Express
 app.use(express.json()); // Habilita o uso de JSON nas requisições
+app.use(cors());
 
 async function inicializarBancoDeDados() {
   try {
