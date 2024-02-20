@@ -8,6 +8,7 @@ import { clearUserIdFromCookie } from "../../utils/AuthenticateUser";
 import Notification from "../../components/Notification/Notification";
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/userService";
+import UserModal from "../Modal/user.js";
 
 const TopNavBarContainer = styled.div`
   display: flex;
@@ -105,12 +106,7 @@ const TopNavBar = () => {
           className="config-img"
           onClick={handleConfig}
         />
-        <img
-          src={iconeUser}
-          alt="User"
-          className="user-image"
-          onClick={handleUser}
-        />
+        <UserModal />
         <img
           src={sair}
           alt="sair"
