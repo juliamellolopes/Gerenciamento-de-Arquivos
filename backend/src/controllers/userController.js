@@ -149,16 +149,23 @@ const userController = {
     }
   },
 
-  //async pesquisarUser(req, res) {
-  //  const { email } = req.body;
-  //  try {
-  //    const user = await Users.findOne({ where: { email } });
+  async pesquisarUser(req, res) {
+    const { userId } = req.params;
+    try {
+      const user = await Users.findOne({
+        where: { id: userId },
+        attributes: ["name", "email"],
+      });
 
-  //    res.status(201).json({ user, mesagem: "User encontrado com sucesso." });
-  //  } catch (error) {
-  //    res.status(500).json({ error: "Erro ao encontrar usuário" });
-  //  }
-  //},
+      res
+        .status(201)
+        .json({ user, mensagem: "Usuário encontrado com sucesso." });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Erro ao encontrar usuário:" + error.message });
+    }
+  },
 };
 
 module.exports = userController;

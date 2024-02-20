@@ -7,20 +7,21 @@ import React, { useState, useEffect } from "react";
 //import iconeMais from "../../assets/icons/treePonits.png";
 //import iconeNovoArquivo from "../../assets/icons/mais.png";
 //import logo from "../../assets/logos/retangular.png";
-import { getUserIdFromCookie } from "../../utils/AuthenticateUser";
 import TopNavBar from "../../components/NavBar/NavBar";
+import Notification from "../../components/Notification/Notification";
 
 import "../../styles/Gerenciamento.css";
 
 function GerenciamentoDeArquivos() {
-  const userData = getUserIdFromCookie();
-  console.log(userData);
+  const userData = localStorage.getItem("cookie");
 
   return (
     <div>
       <TopNavBar />
       <div className="content-below-navbar">
-        <p>Bem-vindo {userData}</p>
+        <div className="fm-container">
+          Nome do arquivo função de deletar, update
+        </div>
       </div>
     </div>
   );

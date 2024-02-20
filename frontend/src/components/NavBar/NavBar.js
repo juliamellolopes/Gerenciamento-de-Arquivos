@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-//import { AiOutlineBell } from "react-icons/ai"; // Ícone de notificação
-//import UserImage from "../../images/Eduardo (1).png";
 import iconeUser from "../../assets/Icons/user.png";
 import logoRetangular from "../../assets/logos/rectangular.png";
 import configuracoes from "../../assets/Icons/engrenagem.png";
 import sair from "../../assets/Icons/logut.png";
+import { clearUserIdFromCookie } from "../../utils/AuthenticateUser";
+import Notification from "../../components/Notification/Notification";
+import { useNavigate } from "react-router-dom";
+import userService from "../../services/userService";
 
 const TopNavBarContainer = styled.div`
   display: flex;
@@ -51,16 +53,76 @@ const UserArea = styled.div`
 `;
 
 const TopNavBar = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState("");
+  const [notification, setNotification] = useState({
+    type: "",
+    message: "",
+    visible: false,
+  });
+
+  const showNotification = (type, message) => {
+    setNotification({
+      type,
+      message,
+      visible: true,
+    });
+  };
+
+  const handleLogout = () => {
+    clearUserIdFromCookie();
+    navigate(`/login`);
+
+    showNotification("success", "Logout realizado com sucesso!");
+    console.log("Logout realizado!");
+  };
+
+  const handleUser = async () => {
+    try {
+      const userData = localStorage.getItem("cookie");
+      const user = await userService.pesquisarUser(userData);
+      setUser(user);
+      console.log(user.user);
+    } catch (error) {
+      console.error("Erro ao pesquisar usuário:", error);
+    }
+  };
+
+  const handleConfig = () => {
+    // Logica para fazer o pop-up de configurações aparecer
+    console.log("configurações");
+  };
+
   return (
     <TopNavBarContainer>
       <UserArea>
         <img src={logoRetangular} alt="LogoRetangular" className="logo" />
       </UserArea>
       <UserArea>
-        <img src={configuracoes} alt="config" className="config-img" />
-        <img src={iconeUser} alt="User" className="user-image" />
-        <img src={sair} alt="sair" className="logou-img" />
+        <img
+          src={configuracoes}
+          alt="config"
+          className="config-img"
+          onClick={handleConfig}
+        />
+        <img
+          src={iconeUser}
+          alt="User"
+          className="user-image"
+          onClick={handleUser}
+        />
+        <img
+          src={sair}
+          alt="sair"
+          className="logou-img"
+          onClick={handleLogout}
+        />
       </UserArea>
+      <Notification
+        type={notification.type}
+        message={notification.message}
+        visible={notification.visible}
+      />
     </TopNavBarContainer>
   );
 };

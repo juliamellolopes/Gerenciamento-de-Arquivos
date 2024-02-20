@@ -46,5 +46,6 @@ router.get(
   "/usuarios/:userId/pastas-arquivos",
   userController.listarPastasArquivos
 );
+router.get("/pesquisar-user/:userId", userController.pesquisarUser);
 
 module.exports = router;

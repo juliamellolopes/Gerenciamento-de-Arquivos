@@ -1,15 +1,14 @@
 /* FileManagement.css */
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap");
+@import url("https: //fonts.google.com/specimen/Fira+Sans");
 
 .content-below-navbar {
   margin-top: 60px; /* Defina a margem superior igual à altura da barra de navegação */
 }
 
 .fm-container {
-  font-family: "DM Sans", sans-serif;
+  font-family: "Fira Sans", sans-serif;
   color: #7a7676;
   background: #e5e5e5;
-  /* Light background for the file management page */
   min-height: 100vh;
   padding: 20px;
 }
