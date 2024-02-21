@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import iconeUser from "../../assets/Icons/user.png";
 import logoRetangular from "../../assets/logos/rectangular.png";
-import configuracoes from "../../assets/Icons/engrenagem.png";
 import sair from "../../assets/Icons/logut.png";
 import { clearUserIdFromCookie } from "../../utils/AuthenticateUser";
 import Notification from "../../components/Notification/Notification";
 import { useNavigate } from "react-router-dom";
-import userService from "../../services/userService";
 import UserModal from "../Modal/user.js";
+import ConfigModal from "../Modal/configuracoes.js";
 
 const TopNavBarContainer = styled.div`
   display: flex;
@@ -41,11 +39,6 @@ const UserArea = styled.div`
     left: -16px;
   }
 
-  .config-img {
-    margin-right: 10px;
-    width: 20px;
-    height: 20px;
-  }
   .logou-img {
     width: 20px;
     height: 20px;
@@ -76,23 +69,13 @@ const TopNavBar = () => {
     console.log("Logout realizado!");
   };
 
-  const handleConfig = () => {
-    // Logica para fazer o pop-up de configurações aparecer
-    console.log("configurações");
-  };
-
   return (
     <TopNavBarContainer>
       <UserArea>
         <img src={logoRetangular} alt="LogoRetangular" className="logo" />
       </UserArea>
       <UserArea>
-        <img
-          src={configuracoes}
-          alt="config"
-          className="config-img"
-          onClick={handleConfig}
-        />
+        <ConfigModal />
         <UserModal />
         <img
           src={sair}
