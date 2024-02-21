@@ -33,29 +33,27 @@ const TopNavBarContainer = styled.div`
 const UserArea = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
 
   .logo {
-    width: 60%;
-  }
-
-  .user-image {
-    margin-right: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 150px; // Ajuste o tamanho da logo conforme necessário
+    position: absolute; // Posiciona a logo em relação ao contêiner
+    left: -16px;
   }
 
   .config-img {
     margin-right: 10px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 20px;
+    height: 20px;
   }
-
   .logou-img {
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 20px;
+    height: 20px;
   }
 `;
 
 const TopNavBar = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState("");
   const [notification, setNotification] = useState({
     type: "",
     message: "",
@@ -76,17 +74,6 @@ const TopNavBar = () => {
 
     showNotification("success", "Logout realizado com sucesso!");
     console.log("Logout realizado!");
-  };
-
-  const handleUser = async () => {
-    try {
-      const userData = localStorage.getItem("cookie");
-      const user = await userService.pesquisarUser(userData);
-      setUser(user);
-      console.log(user.user);
-    } catch (error) {
-      console.error("Erro ao pesquisar usuário:", error);
-    }
   };
 
   const handleConfig = () => {

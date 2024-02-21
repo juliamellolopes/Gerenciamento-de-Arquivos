@@ -4,17 +4,27 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import iconeUser from "../../assets/Icons/user.png";
 import userService from "../../services/userService";
+import styled from "styled-components";
 
 const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(120%, -203%)",
+  position: "fixed",
+  top: "20%",
+  right: "0%",
+  transform: "translateY(-50%)",
   width: 250,
   bgcolor: "background.paper",
   boxShadow: 2,
-  p: 4,
+  p: 3,
 };
+
+const UserArea = styled.div`
+  .user-image {
+    margin-right: 10px;
+    width: 22px;
+    height: 22px;
+    margin-top: 5px;
+  }
+`;
 
 const ProfileModal = () => {
   const [open, setOpen] = useState(false);
@@ -34,14 +44,25 @@ const ProfileModal = () => {
 
   const handleClose = () => setOpen(false);
 
+  const getInitials = (name) => {
+    const words = name.split(" ");
+    const firstTwoWords = words.slice(0, 2);
+    return firstTwoWords
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+  };
   return (
     <div>
-      <img
-        src={iconeUser}
-        alt="User"
-        className="user-image"
-        onClick={handleOpen}
-      />
+      <UserArea>
+        <img
+          src={iconeUser}
+          alt="User"
+          className="user-image"
+          onClick={handleOpen}
+        />
+      </UserArea>
+
       <Modal
         open={open}
         onClose={handleClose}
@@ -50,17 +71,39 @@ const ProfileModal = () => {
         BackdropProps={{ invisible: true }}
       >
         <Box sx={style}>
-          {/*<Typography id="modal-modal-title" variant="h6" component="h2">
-            Perfil do Usuário
-          </Typography>*/}
           {userData && (
-            <div>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                {userData.user.name}
-              </Typography>
-              <Typography id="modal-modal-description">
-                {userData.user.email}
-              </Typography>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <div
+                style={{
+                  width: 60,
+                  height: 60,
+                  borderRadius: "50%",
+                  backgroundColor: "#0F679A",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#ffffff",
+                  fontWeight: "bold",
+                  fontSize: 16,
+                  marginRight: 10,
+                }}
+              >
+                {getInitials(userData.user.name)}
+              </div>
+              <div>
+                <Typography variant="h6" component="h2">
+                  {userData.user.name}
+                </Typography>
+                <Typography>{userData.user.email}</Typography>
+                <Typography variant="body2">
+                  <a
+                    href="/configuracoes"
+                    style={{ textDecoration: "none", color: "#007bff" }}
+                  >
+                    Editar perfil
+                  </a>
+                </Typography>
+              </div>
             </div>
           )}
         </Box>
